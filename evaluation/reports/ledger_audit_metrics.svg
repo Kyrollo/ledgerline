@@ -1,0 +1,88 @@
+<svg width="760" height="340" viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="760" height="340" rx="16" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Title & Header -->
+  <text x="32" y="44" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="#f8fafc">
+    LedgerLine Accounts-Payable 3-Way Match &amp; Audit Engine
+  </text>
+  <text x="32" y="66" font-family="JetBrains Mono, monospace" font-size="11" fill="#94a3b8">
+    Model: qwen2.5:0.5b | Hardware: NVIDIA RTX A5000 (16GB VRAM) | Status: PASSED
+  </text>
+
+  <!-- Metric Card 1: 3-Way Match Throughput -->
+  <g transform="translate(32, 90)">
+    <rect width="210" height="90" rx="10" fill="#111827" stroke="#1f2937" />
+    <text x="16" y="26" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">MATCHING SPEED</text>
+    <text x="16" y="58" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="#10b981">
+      0.98 µs
+    </text>
+    <text x="16" y="78" font-family="Inter, sans-serif" font-size="10" fill="#64748b">
+      per line item comparison
+    </text>
+  </g>
+
+  <!-- Metric Card 2: Processed Spend Ingested -->
+  <g transform="translate(262, 90)">
+    <rect width="220" height="90" rx="10" fill="#111827" stroke="#1f2937" />
+    <text x="16" y="26" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">PROCESSED SPEND</text>
+    <text x="16" y="58" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="#38bdf8">
+      $61,376.25
+    </text>
+    <text x="16" y="78" font-family="Inter, sans-serif" font-size="10" fill="#64748b">
+      Across 4 Enterprise Invoices
+    </text>
+  </g>
+
+  <!-- Metric Card 3: Recoverable Variance -->
+  <g transform="translate(502, 90)">
+    <rect width="226" height="90" rx="10" fill="#111827" stroke="#1f2937" />
+    <text x="16" y="26" font-family="Inter, sans-serif" font-size="11" fill="#94a3b8">FLAGGED VARIANCE</text>
+    <text x="16" y="58" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="#f59e0b">
+      $13,300.00
+    </text>
+    <text x="16" y="78" font-family="Inter, sans-serif" font-size="10" fill="#64748b">
+      Protected Corporate Liquidity
+    </text>
+  </g>
+
+  <!-- Audit Micro-benchmarks bar -->
+  <g transform="translate(32, 205)">
+    <rect width="696" height="105" rx="10" fill="#111827" stroke="#1f2937" />
+    <text x="16" y="24" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#e2e8f0">
+      Accounts-Payable Control &amp; AI Verification Micro-benchmarks
+    </text>
+    
+    <text x="16" y="48" font-family="JetBrains Mono, monospace" font-size="11" fill="#cbd5e1">
+      • 100-Item PO vs Invoice Cross-Reconciliation:
+    </text>
+    <text x="440" y="48" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="#10b981">
+      0.10 ms
+    </text>
+
+    <text x="16" y="70" font-family="JetBrains Mono, monospace" font-size="11" fill="#cbd5e1">
+      • Local GPU CFO Synthesis Latency:
+    </text>
+    <text x="440" y="70" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="#10b981">
+      2971.6 ms
+    </text>
+
+    <text x="16" y="92" font-family="JetBrains Mono, monospace" font-size="11" fill="#cbd5e1">
+      • Algorithmic Match Accuracy Rate:
+    </text>
+    <text x="440" y="92" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="#38bdf8">
+      25.0%
+    </text>
+  </g>
+</svg>

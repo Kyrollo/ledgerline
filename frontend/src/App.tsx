@@ -1,170 +1,134 @@
 import React, { useEffect, useState } from 'react';
-import { Activity, AlertTriangle, CheckCircle2, ShieldCheck, Sparkles, Terminal } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Header } from './components/Header';
+import { MatchingConsoleTab } from './components/MatchingConsoleTab';
+import { FinancialAnalyticsTab } from './components/FinancialAnalyticsTab';
+import { LiveAuditReconciliationLabTab } from './components/LiveAuditReconciliationLabTab';
+import { fetchMatches, fetchStats } from './lib/api';
+import { AuditStats, ThreeWayMatchResult } from './types/ledgerline';
+import { GitCommit, Layers, BarChart3, PlayCircle } from 'lucide-react';
 
-interface HealthData {
-  status: string;
-  checks?: Record<string, string>;
-  environment?: string;
-}
-
-export default function App() {
-  const [health, setHealth] = useState<HealthData | null>(null);
-  const [loading, setLoading] = useState(true);
+export const App: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'matching' | 'analytics' | 'lab'>('matching');
+  const [matches, setMatches] = useState<ThreeWayMatchResult[]>([]);
+  const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
+  const [stats, setStats] = useState<AuditStats | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function checkHealth() {
-      try {
-        const res = await fetch('/api/v1/readyz');
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({ detail: res.statusText }));
-          throw new Error(errData.detail || `HTTP ${res.status}`);
-        }
-        const data = await res.json();
-        setHealth(data);
-      } catch (err: any) {
-        setError(err.message || 'Failed to reach API gateway');
-      } finally {
-        setLoading(false);
+  const loadData = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const [fetchedMatches, fetchedStats] = await Promise.all([
+        fetchMatches(),
+        fetchStats(),
+      ]);
+      setMatches(fetchedMatches);
+      setStats(fetchedStats);
+      if (fetchedMatches.length > 0 && !selectedMatchId) {
+        setSelectedMatchId(fetchedMatches[0].match_id);
       }
+    } catch (err: any) {
+      setError(err?.message || 'Failed to load accounts payable records from LedgerLine backend');
+    } finally {
+      setIsLoading(false);
     }
-    checkHealth();
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
+  const handleReconcileComplete = (newMatch: ThreeWayMatchResult) => {
+    setMatches((prev) => [newMatch, ...prev]);
+    setSelectedMatchId(newMatch.match_id);
+    fetchStats().then(setStats).catch(() => {});
+  };
+
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Header */}
-      <header className="border-b border-border bg-card/60 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold shadow-sm">
-              L
-            </div>
-            <div>
-              <span className="font-bold text-lg tracking-tight">Ledgerline</span>
-              <span className="text-xs text-muted-foreground ml-2 hidden sm:inline-block">v1.0.0</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500/30">
+      {/* LedgerLine Header */}
+      <Header stats={stats} isLoading={isLoading} onRefresh={loadData} />
 
-          <div className="flex items-center gap-3">
-            {loading ? (
-              <Badge variant="outline" className="animate-pulse">Checking...</Badge>
-            ) : error ? (
-              <Badge variant="destructive" className="flex items-center gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5" /> Degraded
-              </Badge>
-            ) : (
-              <Badge variant="success" className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Operational
-              </Badge>
-            )}
-            <Button variant="outline" size="sm" asChild>
-              <a href="/docs" target="_blank" rel="noreferrer">
-                API Docs
-              </a>
-            </Button>
-          </div>
+      {/* Main Content */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+        {/* Navigation Tabs */}
+        <div className="flex border-b border-slate-800 gap-2">
+          <button
+            onClick={() => setActiveTab('matching')}
+            className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === 'matching'
+                ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            3-Way Matching Console ({matches.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab('analytics')}
+            className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === 'analytics'
+                ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            Spend &amp; Variance Analytics
+          </button>
+
+          <button
+            onClick={() => setActiveTab('lab')}
+            className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === 'lab'
+                ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <PlayCircle className="w-4 h-4" />
+            Live AP Reconciler Lab
+          </button>
         </div>
-      </header>
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-8">
         {error && (
-          <Alert className="border-red-500/30 bg-red-500/5 text-red-600">
-            <AlertTriangle className="w-4 h-4 text-red-500" />
-            <AlertTitle>Upstream Degraded (RFC 7807 503)</AlertTitle>
-            <AlertDescription className="text-muted-foreground text-xs font-mono">
-              {error} - Backend dependency unavailable. Degraded mode active.
-            </AlertDescription>
-          </Alert>
+          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
+            {error}
+          </div>
         )}
 
-        <div className="space-y-2">
-          <h1 className="text-3xl font-extrabold tracking-tight">Ledgerline</h1>
-          <p className="text-muted-foreground max-w-3xl leading-relaxed">
-            Accounts-Payable Document Intelligence: multimodal OCR/VLM invoice extraction, automated 3-way matching, and human-in-the-loop review
-          </p>
-        </div>
+        {/* Tab Views */}
+        {activeTab === 'matching' && (
+          <MatchingConsoleTab
+            matches={matches}
+            selectedMatchId={selectedMatchId}
+            onSelectMatch={setSelectedMatchId}
+          />
+        )}
 
-        {/* Feature Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <div className="w-8 h-8 rounded-md bg-primary/10 text-primary flex items-center justify-center mb-2">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
-              <CardTitle>Verified Production Core</CardTitle>
-              <CardDescription>
-                Strict CI enforcement against mock responses or fake token streams. All endpoints hit real models.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+        {activeTab === 'analytics' && (
+          <FinancialAnalyticsTab stats={stats} matches={matches} />
+        )}
 
-          <Card>
-            <CardHeader>
-              <div className="w-8 h-8 rounded-md bg-primary/10 text-primary flex items-center justify-center mb-2">
-                <Activity className="w-4 h-4" />
-              </div>
-              <CardTitle>Observability Stack</CardTitle>
-              <CardDescription>
-                Prometheus metrics, OpenTelemetry spans, and Langfuse tracing integrated into every inference call.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <div className="w-8 h-8 rounded-md bg-primary/10 text-primary flex items-center justify-center mb-2">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <CardTitle>Unique UI Archetype</CardTitle>
-              <CardDescription>
-                Tailored for Fintech back-office workflows with custom tokens and typography.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-
-        {/* System Status Panel */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-primary" /> Live Cluster Connectivity
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="bg-muted/50 rounded-lg p-4 font-mono text-xs space-y-2">
-              <div className="flex justify-between border-b border-border/50 pb-2">
-                <span className="text-muted-foreground">Gateway Port:</span>
-                <span>8009</span>
-              </div>
-              <div className="flex justify-between border-b border-border/50 pb-2">
-                <span className="text-muted-foreground">Frontend Port:</span>
-                <span>3009</span>
-              </div>
-              <div className="flex justify-between border-b border-border/50 pb-2">
-                <span className="text-muted-foreground">LLM Provider:</span>
-                <span>Ollama / Local GPU (Fallback: Cloud)</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Cluster Readiness:</span>
-                <span className={health?.status === 'ready' ? 'text-emerald-500' : 'text-amber-500'}>
-                  {health?.status || 'connecting'}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {activeTab === 'lab' && (
+          <LiveAuditReconciliationLabTab onReconcileComplete={handleReconcileComplete} />
+        )}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        Ledgerline &bull; Autonomous AI Production Stack &bull; Licensed under MIT
+      <footer className="border-t border-slate-900 bg-slate-950/80 px-6 py-4 text-center text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="flex items-center gap-2 font-mono">
+          <GitCommit className="w-3.5 h-3.5 text-emerald-500" />
+          <span>LedgerLine Production v1.0.0</span>
+          <span>•</span>
+          <span>Automated 3-Way Financial Control System</span>
+        </div>
+        <div>
+          <span>Local Engine: NVIDIA RTX A5000 Laptop GPU (16GB VRAM)</span>
+        </div>
       </footer>
     </div>
   );
-}
+};
+
+export default App;
