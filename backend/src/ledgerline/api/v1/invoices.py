@@ -40,7 +40,7 @@ async def get_stats() -> AuditStats:
 async def run_live_reconcile(req: ReconcileRequest) -> ThreeWayMatchResult:
     """
     Parses raw invoice text, executes algorithmic 3-way match against PO,
-    and prompts local GPU Ollama on NVIDIA RTX A5000 to synthesize an executive CFO audit memorandum.
+    and prompts local GPU Ollama on NVIDIA Dedicated NVIDIA GPU to synthesize an executive CFO audit memorandum.
     """
     if not req.invoice_text.strip():
         raise HTTPException(status_code=400, detail="Invoice document text cannot be empty")

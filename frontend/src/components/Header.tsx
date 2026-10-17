@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({ stats, isLoading, onRefresh }) =
 
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-emerald-500/30 text-xs text-emerald-400">
             <Cpu className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">RTX A5000</span>
+            <span className="hidden sm:inline">Dedicated NVIDIA GPU</span>
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
           </div>
 

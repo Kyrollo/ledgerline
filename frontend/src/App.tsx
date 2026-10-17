@@ -144,7 +144,7 @@ export const App: React.FC = () => {
           <span>Automated 3-Way Financial Control System</span>
         </div>
         <div>
-          <span>Local Engine: NVIDIA RTX A5000 Laptop GPU (16GB VRAM)</span>
+          <span>Local Engine: Dedicated NVIDIA GPU (16GB VRAM)</span>
         </div>
       </footer>
     </div>

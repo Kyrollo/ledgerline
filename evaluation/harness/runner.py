@@ -50,7 +50,7 @@ def generate_ledger_metrics_svg(report: dict, output_path: Path) -> None:
     LedgerLine Accounts-Payable 3-Way Match &amp; Audit Engine
   </text>
   <text x="32" y="66" font-family="JetBrains Mono, monospace" font-size="11" fill="#94a3b8">
-    Model: {report.get('model', 'qwen2.5:0.5b')} | Hardware: NVIDIA RTX A5000 (16GB VRAM) | Status: {report.get('status', 'PASSED')}
+    Model: {report.get('model', 'qwen2.5:0.5b')} | Hardware: Dedicated NVIDIA GPU (16GB VRAM) | Status: {report.get('status', 'PASSED')}
   </text>
 
   <!-- Metric Card 1: 3-Way Match Throughput -->
@@ -158,7 +158,7 @@ async def run_benchmark() -> int:
     print(f"--> [PASS] 100-item 3-way match completed in {bulk_match_ms:.2f} ms ({match_speed_us:.2f} µs per item)")
     assert bulk_result.net_variance == 0.0
 
-    # Benchmark 2: Live GPU CFO synthesis on local RTX A5000
+    # Benchmark 2: Live GPU CFO synthesis on local Dedicated NVIDIA GPU
     live_req = ReconcileRequest(
         invoice_text="""VENDOR: Acme Global Solutions
 TAX ID: US-EIN-12-3456789
@@ -197,7 +197,7 @@ TOTAL: 2056.75""",
         "timestamp": time.time(),
         "status": "PASSED",
         "model": "qwen2.5:0.5b",
-        "hardware": "NVIDIA RTX A5000 Laptop GPU (16GB VRAM)",
+        "hardware": "Dedicated NVIDIA GPU (16GB VRAM)",
         "match_speed_us": round(match_speed_us, 2),
         "bulk_match_100_items_ms": round(bulk_match_ms, 2),
         "gpu_synthesis_ms": round(gpu_synthesis_ms, 1),
@@ -222,7 +222,7 @@ TOTAL: 2056.75""",
 **Product**: LedgerLine — Accounts-Payable Document Intelligence & 3-Way Matching Engine  
 **Status**: PASSED  
 **Execution Timestamp**: 2026-10-11  
-**Hardware Engine**: NVIDIA RTX A5000 Laptop GPU (16GB VRAM)  
+**Hardware Engine**: Dedicated NVIDIA GPU (16GB VRAM)  
 **Inference Engine**: Local Ollama (`qwen2.5:0.5b`)  
 
 ---

@@ -3,7 +3,7 @@
   "timestamp": 1791719355.8616228,
   "status": "PASSED",
   "model": "qwen2.5:0.5b",
-  "hardware": "NVIDIA RTX A5000 Laptop GPU (16GB VRAM)",
+  "hardware": "Dedicated NVIDIA GPU (16GB VRAM)",
   "match_speed_us": 0.98,
   "bulk_match_100_items_ms": 0.1,
   "gpu_synthesis_ms": 2971.6,

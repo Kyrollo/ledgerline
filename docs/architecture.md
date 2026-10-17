@@ -26,7 +26,7 @@ flowchart TD
     end
 
     subgraph LocalHardware["Workstation GPU Inference Layer"]
-        OllamaLocal["Local Ollama Engine\nNVIDIA RTX A5000 (16GB VRAM) / qwen2.5:0.5b"]
+        OllamaLocal["Local Ollama Engine\nDedicated NVIDIA GPU (16GB VRAM) / qwen2.5:0.5b"]
     end
 
     APSpecialist -->|Reviews Matches & Overrides| UI
@@ -52,7 +52,7 @@ sequenceDiagram
     participant API as FastAPI Gateway
     participant Extractor as Document Extractor
     participant Engine as 3-Way Match Engine
-    participant GPU as Local RTX A5000 (Ollama)
+    participant GPU as Local Dedicated NVIDIA GPU (Ollama)
     participant Store as AP Audit Store
 
     AP->>UI: Submit Invoice Text / Multimodal OCR
@@ -87,6 +87,6 @@ sequenceDiagram
 - Reconciles against warehouse Goods Receipts (GR): identifies physical delivery shortages and flags unfulfilled goods.
 
 ### C. Executive CFO Reconciler (`reconciler_engine.py`)
-- Employs local GPU LLM (`qwen2.5:0.5b` on NVIDIA RTX A5000) to synthesize concise, CFO-grade audit memoranda.
+- Employs local GPU LLM (`qwen2.5:0.5b` on NVIDIA Dedicated NVIDIA GPU) to synthesize concise, CFO-grade audit memoranda.
 - Generates definitive accounting directives: `APPROVE_FOR_PAYMENT`, `FLAG_FOR_VENDOR_CREDIT`, `HOLD_FOR_RECEIVING`, `FLAG_FOR_FRAUD_REVIEW`.
 - Ensures zero financial data leakage by running exclusively on on-premise hardware.

@@ -80,7 +80,7 @@ Provide a concise, professional 2-sentence executive reconciliation instruction 
                 )
     except Exception as exc:
         if not isinstance(exc, UpstreamOllamaError):
-            raise UpstreamOllamaError(f"Failed to connect to local Ollama on RTX A5000: {exc}") from exc
+            raise UpstreamOllamaError(f"Failed to connect to local Ollama on Dedicated NVIDIA GPU: {exc}") from exc
         raise
 
     return match_result

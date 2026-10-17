@@ -3,7 +3,7 @@
 **Product**: LedgerLine — Accounts-Payable Document Intelligence & 3-Way Matching Engine  
 **Status**: PASSED  
 **Execution Timestamp**: 2026-10-11  
-**Hardware Engine**: NVIDIA RTX A5000 Laptop GPU (16GB VRAM)  
+**Hardware Engine**: Dedicated NVIDIA GPU (16GB VRAM)  
 **Inference Engine**: Local Ollama (`qwen2.5:0.5b`)  
 
 ---
