@@ -5,10 +5,11 @@ import { FinancialAnalyticsTab } from './components/FinancialAnalyticsTab';
 import { LiveAuditReconciliationLabTab } from './components/LiveAuditReconciliationLabTab';
 import { fetchMatches, fetchStats } from './lib/api';
 import { AuditStats, ThreeWayMatchResult } from './types/ledgerline';
-import { GitCommit, Layers, BarChart3, PlayCircle } from 'lucide-react';
+import { FileUploadZone } from './components/FileUploadZone';
+import { GitCommit, Layers, BarChart3, PlayCircle, FolderUp } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'matching' | 'analytics' | 'lab'>('matching');
+  const [activeTab, setActiveTab] = useState<'matching' | 'analytics' | 'lab' | 'uploads'>('matching');
   const [matches, setMatches] = useState<ThreeWayMatchResult[]>([]);
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
   const [stats, setStats] = useState<AuditStats | null>(null);
@@ -89,6 +90,18 @@ export const App: React.FC = () => {
             <PlayCircle className="w-4 h-4" />
             Live AP Reconciler Lab
           </button>
+
+          <button
+            onClick={() => setActiveTab('uploads')}
+            className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === 'uploads'
+                ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <FolderUp className="w-4 h-4" />
+            Invoice &amp; PO Ingestion
+          </button>
         </div>
 
         {error && (
@@ -112,6 +125,13 @@ export const App: React.FC = () => {
 
         {activeTab === 'lab' && (
           <LiveAuditReconciliationLabTab onReconcileComplete={handleReconcileComplete} />
+        )}
+
+        {activeTab === 'uploads' && (
+          <FileUploadZone
+            title="Invoice & Purchase Order Ingestion"
+            acceptedTypes=".pdf,.csv,.xlsx,.txt,.json"
+          />
         )}
       </main>
 

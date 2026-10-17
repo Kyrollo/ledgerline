@@ -13,6 +13,8 @@ import {
   Scale,
 } from 'lucide-react';
 
+import { MarkdownRenderer } from './MarkdownRenderer';
+
 interface LiveAuditReconciliationLabTabProps {
   onReconcileComplete: (match: ThreeWayMatchResult) => void;
 }
@@ -286,8 +288,8 @@ export const LiveAuditReconciliationLabTab: React.FC<LiveAuditReconciliationLabT
             </div>
 
             {/* GPU Synthesized CFO Memorandum */}
-            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800">
-              <div className="flex items-center justify-between mb-2">
+            <div className="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-emerald-400" />
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-200">
@@ -304,9 +306,11 @@ export const LiveAuditReconciliationLabTab: React.FC<LiveAuditReconciliationLabT
                   {lastMatch.reconciliation_decision}
                 </span>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed font-sans whitespace-pre-wrap">
-                {lastMatch.reconciliation_reasoning}
-              </p>
+              <MarkdownRenderer
+                content={lastMatch.reconciliation_reasoning}
+                title="Executive CFO Audit Memorandum"
+                maxInitialHeight="max-h-[350px]"
+              />
             </div>
           </div>
         ) : (

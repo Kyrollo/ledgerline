@@ -17,6 +17,8 @@ import {
   Scale,
 } from 'lucide-react';
 
+import { MarkdownRenderer } from './MarkdownRenderer';
+
 interface MatchingConsoleTabProps {
   matches: ThreeWayMatchResult[];
   selectedMatchId: string | null;
@@ -305,8 +307,8 @@ export const MatchingConsoleTab: React.FC<MatchingConsoleTabProps> = ({
               </div>
 
               {/* AI CFO Audit Memorandum */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                <div className="flex items-center justify-between mb-2">
+              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4 text-emerald-400" />
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-200">
@@ -326,9 +328,11 @@ export const MatchingConsoleTab: React.FC<MatchingConsoleTabProps> = ({
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed font-sans">
-                  {activeMatch.reconciliation_reasoning}
-                </p>
+                <MarkdownRenderer
+                  content={activeMatch.reconciliation_reasoning}
+                  title="Executive CFO Directive"
+                  maxInitialHeight="max-h-[350px]"
+                />
               </div>
             </div>
           </>

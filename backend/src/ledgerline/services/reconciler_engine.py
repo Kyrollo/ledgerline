@@ -66,7 +66,7 @@ Provide a concise, professional 2-sentence executive reconciliation instruction 
                     "model": req.model,
                     "prompt": prompt,
                     "stream": False,
-                    "options": {"temperature": 0.2, "num_predict": 180},
+                    "options": {"temperature": 0.2, "num_predict": 2048},
                 },
             )
             if resp.status_code == 200:
